@@ -157,8 +157,10 @@ class Candy:
             r, c=  queue.popleft()
             self.visited[r][c] = True
             if (self.grid[r][c] >= 7):
-                for x, y in [(1, 1), (1, 0), (1, -1), (0, 1), (0, 0), (0,-1), (-1, 1), (-1, 0), (-1, -1)]:
+                for x, y in [(1, 1), (1, 0), (1, -1), (0, 1),  (0,-1), (-1, 1), (-1, 0), (-1, -1)]:
                     try:
+                        if (grid[r+x][c+y] > 6):
+                            score+= 5000
                         grid[r+x][c+y] = 0
                     except IndexError:
                         continue
@@ -249,16 +251,20 @@ class Candy:
         return (self.bfs(i, j, self.grid[i][j]) > 2)
 
     def gravity(self):
-        for i in range(len(self.grid[0])):
-            counter = 0
-            try:
-                while True:
-                    self.grid[i].remove(0)
-                    counter+= 1
-            except ValueError:
-                while (counter != 0):
-                    self.grid[i].insert(0,random.randint(1, 6))
-                    counter -= 1
+        for j in range(len(self.grid[0])):
+            new_list = deque()
+            for i in range(len(self.grid)):
+                if grid[i][j] == 0:
+                    new_list.appendleft(random.randint(1, 6))
+                else:
+                    new_list.append(grid[i][j])
+            for i in range(len(self.grid[j])):
+                grid[i][j] = new_list.popleft()
+                    
+
+                
+
+
         renew_grid(self.grid)
         self.checker()
 
