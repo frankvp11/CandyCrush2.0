@@ -1,0 +1,16 @@
+.container {
+    border: 3px solid #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.welcome {
+    text-align: center;
+}
+#div1 {
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+  }
