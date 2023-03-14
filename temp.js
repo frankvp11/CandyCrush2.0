@@ -104,7 +104,7 @@ function printGridArray() {
     console.log("Done printing!");
 }
 
-function dfs(i, j, grid) {
+function dfs(i, j) {
 
     let original_Value = grid[i][j];
     let stack = [[i, j]];
@@ -113,16 +113,16 @@ function dfs(i, j, grid) {
         let [x, y] = stack.pop();
         visited[x][y] = true;
         size += 1;
-        if (x + 1 < grid.length && grid[x + 1][y] == original_Value && !visited[x + 1][y]) {
+        if (x + 1 < grid.length && grid[x + 1][y] == original_Value && !visited[x + 1][y] && original_Value != 0) {
             stack.push([x + 1, y]);
         }
-        if (x - 1 >= 0 && grid[x - 1][y] == original_Value && !visited[x - 1][y]) {
+        if (x - 1 >= 0 && grid[x - 1][y] == original_Value && !visited[x - 1][y] && original_Value != 0 ) {
             stack.push([x - 1, y]);
         }
-        if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value && !visited[x][y + 1]) {
+        if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value && !visited[x][y + 1] && original_Value != 0) {
             stack.push([x, y + 1]);
         }
-        if (y - 1 >= 0 && grid[x][y - 1] == original_Value && !visited[x][y - 1]) {
+        if (y - 1 >= 0 && grid[x][y - 1] == original_Value && !visited[x][y - 1] && original_Value != 0) {
             stack.push([x, y - 1]);
         }
         
@@ -132,7 +132,7 @@ function dfs(i, j, grid) {
 }
 
 
-function changingDFS(i, j, grid){
+function changingDFS(i, j){
     let original_Value = grid[i][j];
     let stack = [[i, j]];
     clearVisited();
@@ -140,16 +140,16 @@ function changingDFS(i, j, grid){
         let [x,y] = stack.pop();
         grid[x][y] = 0;
         visited[x][y] = true;
-        if (x + 1 < grid.length && grid[x + 1][y] == original_Value && !visited[x + 1][y]) {
+        if (x + 1 < grid.length && grid[x + 1][y] == original_Value && !visited[x + 1][y] && original_Value != 0) {
             stack.push([x + 1, y]);
         }
-        if (x - 1 >= 0 && grid[x - 1][y] == original_Value && !visited[x - 1][y]) {
+        if (x - 1 >= 0 && grid[x - 1][y] == original_Value && !visited[x - 1][y] && original_Value != 0 ) {
             stack.push([x - 1, y]);
         }
-        if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value && !visited[x][y + 1]) {
+        if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value && !visited[x][y + 1]&& original_Value != 0 ) {
             stack.push([x, y + 1]);
         }
-        if (y - 1 >= 0 && grid[x][y - 1] == original_Value && !visited[x][y - 1]) {
+        if (y - 1 >= 0 && grid[x][y - 1] == original_Value && !visited[x][y - 1] && original_Value != 0) {
             stack.push([x, y - 1]);
         }
     }
@@ -163,9 +163,9 @@ function eraseValidMoves() {
     for (let i = 0; i < numOfRows; i++) {
         for (let j = 0; j < numOfCols; j++) {
             if (!visited[i][j]) {
-                var size = dfs(i, j, grid, visited);
+                var size = dfs(i, j);
                 if (size >= 3) {
-                    changingDFS(i,j , grid);
+                    changingDFS(i,j );
                     gravity();
                     changesDone = true;
                 }
@@ -189,6 +189,9 @@ function gravity(){
         }    
         for (let i = 0; i < temp.length; i++){
             grid[i][j] = temp.shift();
+            if (grid[i][j] == 0){
+                grid[i][j] = (Math.floor(Math.random() * maxNumOfCandyCodes) + 1);
+            }
         }    
     }
     
