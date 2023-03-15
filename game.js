@@ -20,12 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let grid;
     let gridContainerElem;
-
+    let score =0 ;
     gridContainerElem =  document.getElementById("grid-container");
+    const scoreText= document.getElementById("score")
     let root = document.documentElement;
     root.style.setProperty('--rows', numOfRows);
     root.style.setProperty('--cols', numOfCols);
-
+    scoreText.innerHTML = "Score: " + score;
 
     function createGridArray() {
         grid = new Array(numOfRows);
@@ -73,20 +74,53 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createGridArray();
     createImageGrid();
+    function temp_bfs(i1, j1, visited, original_Value){
+        let stack = [[i1, j1]];
+        let size =0 ;
+        while (stack.length != 0){
+            
+            let [x, y] = stack.pop();
+            visited[x][y] = true;
+            size += 1; //  || Math.abs(grid[x+1][y]-original_Value) == 6
+            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value) && !visited[x + 1][y]) {
+                stack.push([x + 1, y]);
+            }
+            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value) && !visited[x - 1][y]) {
+                stack.push([x - 1, y]);
+            }
+            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value ) && !visited[x][y + 1]) {
+                stack.push([x, y + 1]);
+            }
+            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value ) && !visited[x][y - 1]) {
+                stack.push([x, y - 1]);
+            }
+        }
+        return size;
+    }
 
+    function checkAll(){
+        let changes= false;
+        let visited = Array.from(Array(numOfRows), ()=> Array(numOfCols).fill(false));
 
+        for (let i = 0; i < numOfRows; i++){
+            for (let j = 0; j < numOfCols; j++){
+                let size = temp_bfs(i, j, visited, grid[i][j]);
+                if (size >= 3){
+                    
+                    changingBFS(i, j, grid[i][j]);
+                    changes = true;
+                }
+            }
+        }
+        return changes;
+    }
 
     function updateImages(){
         for (let i = 0; i < grid.length; i++){
             for (let j = 0; j < grid[i].length; j++){
                 const sourceId = i*numOfRows + j;
                 const current_Elem = document.querySelector(`[data-id= "${sourceId}"]`)
-                // if (grid[i][j] == 0){
-                //     current_Elem.src = null;
-                // }
-                // else {
-                //     current_Elem.src = candy_codes[grid[i][j]];
-                // }
+              
                 current_Elem.src = candy_codes[grid[i][j]];
             }
         }
@@ -121,23 +155,59 @@ document.addEventListener('DOMContentLoaded', () => {
     
     function changingBFS(i1, j1, original_Value){
         let stack = [[i1, j1]];
-
+        let size =0 ;
         while (stack.length != 0){
             let [x, y] = stack.pop();
-            grid[x][y] = 12;
-            if (x + 1 < grid.length && grid[x + 1][y] == original_Value) {
+            if (grid[x][y] > 6){
+                console.log("Big boom!");
+                if (x+1 < grid.length){
+                    if (y + 1<  grid[0].length){
+                        grid[x+1][y+1] = 0;
+                        grid[x][y+1]= 0;
+                    } 
+                    if (y-1 > 0){
+                        grid[x+1][y-1] = 0;
+                        grid[x][y-1] = 0;
+                    }
+                    grid[x+1][y] = 0;
+                }
+                if (x-1 > 0){
+                    if (y + 1<  grid[0].length){
+                        grid[x-1][y+1] = 0;
+                    }
+                    if (y-1 > 0){
+                        grid[x-1][y-1] = 0;
+                    }
+                    grid[x-1][y] = 0;
+                    score += 150000;
+                }
+                
+            }
+            console.log("X: " + x + " Y: " + y);
+            grid[x][y] = 0;
+            size += 1; // //  || (Math.abs(grid[x+1][y]-original_Value) == 6)
+            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value )) {
                 stack.push([x + 1, y]);
             }
-            if (x - 1 >= 0 && grid[x - 1][y] == original_Value) {
+            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value )) {
                 stack.push([x - 1, y]);
             }
-            if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value) {
+            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value )) {
                 stack.push([x, y + 1]);
             }
-            if (y - 1 >= 0 && grid[x][y - 1] == original_Value) {
+            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value )) {
                 stack.push([x, y - 1]);
             }
         }
+        if (size >= 5){
+            if (original_Value > 6){
+                grid[i1][j1] = original_Value;
+            }
+            else {
+                grid[i1][j1] = original_Value+6;
+            }
+        }
+        score += size * 15;
     }
 
     function bfs(i1, j1, original_Value){
@@ -148,17 +218,17 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let [x, y] = stack.pop();
             visited[x][y] = true;
-            size += 1;
-            if (x + 1 < grid.length && grid[x + 1][y] == original_Value && !visited[x + 1][y]) {
+            size += 1; // || Math.abs(grid[x+1][y]-original_Value) == 6
+            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value ) && !visited[x + 1][y]) {
                 stack.push([x + 1, y]);
             }
-            if (x - 1 >= 0 && grid[x - 1][y] == original_Value && !visited[x - 1][y]) {
+            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value ) && !visited[x - 1][y]) {
                 stack.push([x - 1, y]);
             }
-            if (y + 1 < grid[x].length && grid[x][y + 1] == original_Value && !visited[x][y + 1]) {
+            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value  ) && !visited[x][y + 1]) {
                 stack.push([x, y + 1]);
             }
-            if (y - 1 >= 0 && grid[x][y - 1] == original_Value && !visited[x][y - 1]) {
+            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value ) && !visited[x][y - 1]) {
                 stack.push([x, y - 1]);
             }
         }
@@ -170,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let j =0 ; j < numOfCols; j++){
             var temp = [];
             for (let i = 0; i < numOfRows; i++){
-                if (grid[i][j] == 12){
+                if (grid[i][j] == 0){
                     temp.unshift((Math.floor(Math.random() * maxNumOfCandyCodes) + 1));
                 }
                 else {
@@ -282,8 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Dropped clone " + sourceId);
     }
     window.setInterval(function(){
-        
+        checkAll();
         gravity();
         updateImages();
+        scoreText.innerHTML = "Score: " + score;
+
     }, 100);
 })
