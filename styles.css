@@ -1,0 +1,82 @@
+:root {
+    --rows: 1;
+    --cols: 1;
+    --cell-size: 90px;
+  }
+  
+  #grid-container {
+    display: grid;
+    grid-template-rows: repeat(var(--rows), var(--cell-size));
+    grid-template-columns: repeat(var(--cols), var(--cell-size));
+    justify-content: center;
+  }
+  
+  #clone-container {
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    border: 1px solid #aaa;
+  }
+  
+  img.color-image {
+    width: 90px;
+    height: 90px;
+  }
+  
+  div.image-container {
+    display: grid;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  
+  img.color-image {
+    overflow-wrap: anywhere;
+  }
+  
+  div.image-container[data-color=red] {
+    background-color: rgb(248, 161, 161);
+  }
+  
+  div.image-container[data-color=orange] {
+    background-color: rgb(242, 220, 180);
+  }
+  
+  div.image-container[data-color=yellow] {
+    background-color: rgb(248, 248, 199);
+    color: #000;
+  }
+  
+  div.image-container[data-color=blue] {
+    background-color: rgb(177, 177, 244);
+  }
+  
+  div.image-container[data-color=green] {
+    background-color: rgb(203, 246, 203);
+  }
+  
+  div.image-container[data-color=purple] {
+    background-color: rgb(225, 180, 225);
+  }
+  
+  #move-type-control {
+    padding: 0.5rem 0;
+  }
+  
+  #move-type-control label {
+    display: flex;
+  }
+  
+  #move-type-control label span {
+    margin-left: 0.5rem;
+  }
+  .scoreboard {
+   
+    border-radius: 10px;
+    margin: auto;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) inset, 0 1px 0 #fff;
+  }
