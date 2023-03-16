@@ -1,19 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
+    debugger;
     console.log("Hello!");
     const candy_codes = {
         
-        1: 'candies/Blue.png',
-        2: 'candies/Green.png',
-        3: 'candies/Orange.png',
-        4: 'candies/Purple.png',
-        5: 'candies/Red.png',
-        6: 'candies/Yellow.png',
-        7: 'candies/BlueWrapped.png',
-        8: 'candies/GreenWrapped.png',
-        9: 'candies/OrangeWrapped.png',
-        10: 'candies/PurpleWrapped.png',
-        11: 'candies/RedWrapped.png',
-        12: 'candies/YellowWrapped.png'
+        1: '/candies/Blue.png',
+        2: '/candies/Green.png',
+        3: '/candies/Orange.png',
+        4: '/candies/Purple.png',
+        5: '/candies/Red.png',
+        6: '/candies/Yellow.png',
+        7: '/candies/BlueWrapped.png',
+        8: '/candies/GreenWrapped.png',
+        9: '/candies/OrangeWrapped.png',
+        10: '/candies/PurpleWrapped.png',
+        11: '/candies/RedWrapped.png',
+        12: '/candies/YellowWrapped.png'
     };
     
     const numOfRows = 9;
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     createGridArray();
     createImageGrid();
+    
     function temp_bfs(i1, j1, visited, original_Value){
         let stack = [[i1, j1]];
         let size =0 ;
@@ -82,24 +84,29 @@ document.addEventListener('DOMContentLoaded', () => {
             
             let [x, y] = stack.pop();
             visited[x][y] = true;
-            size += 1; //  || Math.abs(grid[x+1][y]-original_Value) == 6
-            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value) && !visited[x + 1][y]) {
+            size += 1; //  
+            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value || (Math.abs(grid[x+1][y]-original_Value) == 6)) && !visited[x + 1][y]) {
                 stack.push([x + 1, y]);
             }
-            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value ) && !visited[x - 1][y]) {
+            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value || (Math.abs(grid[x-1][y]-original_Value) == 6)) && !visited[x - 1][y]) {
                 stack.push([x - 1, y]);
             }
-            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value ) && !visited[x][y + 1]) {
+            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value || (Math.abs(grid[x][y+1]-original_Value) == 6)) && !visited[x][y + 1]) {
                 stack.push([x, y + 1]);
             }
-            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value ) && !visited[x][y - 1]) {
+            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value || (Math.abs(grid[x][y-1]-original_Value) == 6)) && !visited[x][y - 1]) {
                 stack.push([x, y - 1]);
             }
         }
         return size;
     }
 
+    
+
+
     function checkAll(){
+        
+
         let changes= false;
         let visited = Array.from(Array(numOfRows), ()=> Array(numOfCols).fill(false));
 
@@ -152,13 +159,17 @@ document.addEventListener('DOMContentLoaded', () => {
         grid[i1][j1] = temp_grid_val2;
         grid[i2][j2] = temp_grid_val1;
     }
-    
+    // So when I add it to this function, it infinite loops aswell. Some how the stack doesn't empty out.
+    // ima print out wht elements it is.
     function changingBFS(i1, j1){
         let stack = [[i1, j1]];
         let original_Value = grid[i1][j1];
         let size =0 ;
+        let visited = Array.from(Array(numOfRows), ()=> Array(numOfCols).fill(false));
+
         while (stack.length != 0){
             let [x, y] = stack.pop();
+            visited[x][y]= true;
             if (grid[x][y] > 6){
                 console.log("Big boom!");
                 if (x+1 < grid.length){
@@ -186,19 +197,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             size += 1; // //  || (Math.abs(grid[x+1][y]-original_Value) == 6)
-            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value )) {
+            if (x + 1 < grid.length && (grid[x + 1][y] == original_Value || Math.abs(grid[x+1][y]-original_Value) == 6) && !visited[x+1][y]) {
                 stack.push([x + 1, y]);
             }
-            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value  )) {
+            if (x - 1 >= 0 && (grid[x - 1][y] == original_Value || Math.abs(grid[x-1][y]-original_Value) == 6) && !visited[x-1][y] ) {
                 stack.push([x - 1, y]);
             }
-            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value  )) {
+            if (y + 1 < grid[x].length && (grid[x][y + 1] == original_Value || Math.abs(grid[x][y+1]-original_Value) == 6) && !visited[x][y+1]) {
                 stack.push([x, y + 1]);
             }
-            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value )) {
+            if (y - 1 >= 0 && (grid[x][y - 1] == original_Value || Math.abs(grid[x][y-1]-original_Value) == 6) && !visited[x][y-1]) {
                 stack.push([x, y - 1]);
             }
             grid[x][y] = 0;
+
+            
         }
         if (size >= 5){
             if (original_Value > 6){
@@ -353,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Dropped clone " + sourceId);
     }
     window.setInterval(function(){
+
         checkAll();
         gravity();
         updateImages();
