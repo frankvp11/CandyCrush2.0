@@ -3,18 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Hello!");
     const candy_codes = {
         
-        1: 'candies/Blue.png',
-        2: 'candies/Green.png',
-        3: 'candies/Orange.png',
-        4: 'candies/Purple.png',
-        5: 'candies/Red.png',
-        6: 'candies/Yellow.png',
-        7: 'candies/BlueWrapped.png',
-        8: 'candies/GreenWrapped.png',
-        9: 'candies/OrangeWrapped.png',
-        10: 'candies/PurpleWrapped.png',
-        11: 'candies/RedWrapped.png',
-        12: 'candies/YellowWrapped.png'
+        1: 'CandyCrush2.0/candies/Blue.png',
+        2: 'CandyCrush2.0/candies/Green.png',
+        3: 'CandyCrush2.0/candies/Orange.png',
+        4: 'CandyCrush2.0/candies/Purple.png',
+        5: 'CandyCrush2.0/candies/Red.png',
+        6: 'CandyCrush2.0/candies/Yellow.png',
+        7: 'CandyCrush2.0/candies/BlueWrapped.png',
+        8: 'CandyCrush2.0/candies/GreenWrapped.png',
+        9: 'CandyCrush2.0/candies/OrangeWrapped.png',
+        10: 'CandyCrush2.0/candies/PurpleWrapped.png',
+        11: 'CandyCrush2.0/candies/RedWrapped.png',
+        12: 'CandyCrush2.0/candies/YellowWrapped.png'
     };
     
     const numOfRows = 9;
